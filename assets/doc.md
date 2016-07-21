@@ -3,20 +3,23 @@
 ##EVENTO: usuário clica nos inputs e entra dados:
 	- CHECK: limitado a 2 characteres
 	- CHECK: limitado a [0-9]
+	- CHECK: limitado a < 59
+		- CHECK: se o usuário tentar entrar 60 nos segundos, +1 em minutos
 	- CHECK: os números default somem para dar lugar aos dados do usuário
 
 ##EVENTO: usuário clica em START:
-	- lê os dados fornecidos pelo usuário:
-		- provavelmente tem que converter para um formato que o programa entenda
-		- como ele já limita a entrada de dados antes, só tem que verificar se há alteração
-	- bota o timer para correr até o fim do tempo estipulado [setTimeout()]:
+	- CHECK: lê os dados fornecidos pelo usuário:
+		- CHECK: provavelmente tem que converter para um formato que o programa entenda
+		- CHECK: como ele já limita a entrada de dados antes, só tem que verificar se há alteração
+	- CHECK: bota o timer para correr até o fim do tempo estipulado [setTimeout()]:
 		- alerta o usuário quando o timer chegar ao fim
-	- habilita o botão de RESET
+	- CHECK: habilita o botão de RESET
 	- transforma o START em PAUSE
 
 ##EVENTO: usuário clica em RESET:
-	- timer volta para 0
+	- CHECK: timer volta para 0
+	- CHECK: RESET é desabilitado
 
 ##EVENTO: usuário clica em PAUSE:
-	- botão PAUSE vira START novamente
+	- CHECK: botão PAUSE vira START novamente
 	- timer pausa a contagem e aguarda novo clique em START
