@@ -12,7 +12,7 @@
 		- CHECK: provavelmente tem que converter para um formato que o programa entenda
 		- CHECK: como ele já limita a entrada de dados antes, só tem que verificar se há alteração
 	- CHECK: bota o timer para correr até o fim do tempo estipulado [setTimeout()]:
-		- alerta o usuário quando o timer chegar ao fim
+		- CHECK: alerta o usuário quando o timer chegar ao fim
 	- CHECK: habilita o botão de RESET
 	- transforma o START em PAUSE
 

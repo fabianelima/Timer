@@ -39,7 +39,9 @@
   cursor: pointer;
   background: #779900;
 }
-#container .reset,
-#container .start {
+#container .reset {
   pointer-events: none;
+}
+#container .pause {
+  display: none;
 }
