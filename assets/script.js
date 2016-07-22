@@ -1,13 +1,7 @@
 /* TIMER APP */
 
-// Tempo com 0 na frente se for um número só
-// Resto da divisão
-// Ele arredonda os segundos em vez de contar quanto isso dá em minutos, por enquanto
-
 $(function() {
 	
-	var contador;
-
 	// Validação do formulário.
 	$('.minutes,.seconds').on('keypress', function() {
 		return event.charCode >= 48 && event.charCode <= 57;
@@ -23,18 +17,22 @@ $(function() {
 	$('.minutes,.seconds').focusout(function() {
 		if ($(this).val() === '') $(this).val('00');
 		else {
-			//													<==== Repensar essa parte.
+			// Repensar essa parte. Ele arredonda os segundos em vez de contar quanto isso dá em minutos, 
+			// por enquanto. Provavelmente resolvível com alguma coisa relacionada a resto de divisão.
 			if ($(this).hasClass('minutes')) {
 				if ($(this).val() > 59) $(this).val('60');
 			}
 			else if ($(this).hasClass('seconds')) {
 				if ($(this).val() > 59) {
+					var min = Math.round($(this).val() / 60);
 					$(this).val('00');
-					$('.minutes').val(Math.round($(this).val() / 60));
+					$('.minutes').val(min);
 				}
 			}
 		}
 	});
+	
+	var contador;
 
 	// Inicia o contador.
 	$('.start').on('click', function() {
@@ -57,8 +55,18 @@ $(function() {
 				j++;
 				s--;
 
-				if (m < 0) m = '00';
-				if (s < 0) s = '00';
+				if (m <= 0) m = '00';
+				if (s <= 0) s = '00';
+
+				if (m < 10 && m != 0) {
+					m = '0' + m;
+
+					if (m.length > 2) {
+						m = m.slice(-2);
+					}
+				}
+
+				if (s < 10 && s != 0) s = '0' + s;
 
 				if (m > 0) {
 					if (s == 0) {
