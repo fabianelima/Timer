@@ -6,38 +6,71 @@
 
 #container {
 	width: 100%;
-	max-width: 1080px;
+	max-width: 900px;
 	margin: auto;
-	font-size: 1.1em;
-	font-family: 'Open Sans', sans-serif;
+	padding: 1%;
+	font-size: 2vw;
+	font-family: 'Economica', sans-serif;
 	position: relative;
-	border: 8px solid #ccc;
+	text-transform: uppercase;
+	background: #999;
+	border-radius: 1em;
 
 	input {
-		width: 10%;
+		width: 25%;
 		text-align: center;
 		color: #fff;
+		font-family: 'Economica', sans-serif;
 	}
 
 	.visor {
-		width: 94.04%;
+		width: 60%;
 		font-size: 4em;
 		text-align: center;
-		background: #000;
-		padding: 3%;
-		color: #fff
+		background: linear-gradient(to top, #444 0%,#000 100%);
+		padding: 3% 0;
+		color: #fff;
+		float: left;
+		position: relative;
+		border-radius: 0.2em;
+		overflow: hidden;
+		box-shadow: inset 0 0 10px #000;
+
+		.progress {
+			width: 100%;
+			height: 10%;
+			top: 0;
+			left: 0;
+			display: inline-block;
+			clear: both;
+			background: @red;
+			position: absolute;
+		}
 	}
 
-	.bt {
-		width: 40%;
-		padding: 3%;
-		margin: 2%;
+	.buttons {
+		width: 30%;
 		float: right;
-		text-align: center;
-		cursor: pointer;
-		background: #790
+		margin: 0 1%;
+		
+		.bt {
+			width: 90%;
+			height: 50%;
+			padding: 3%;
+			margin: 4%;
+			text-align: center;
+			cursor: pointer;
+			background: @red;
+			color: #fff;
+			border-radius: 1em;
+			cursor: pointer;
+		}
+
+		.reset { pointer-events: none }
+		.pause { display: none }
+
+		.d { background: #ccc }
 	}
 
-	.reset { pointer-events: none }
-	.pause { display: none }
+	.clear { clear: both; }
 }

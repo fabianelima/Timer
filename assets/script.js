@@ -1,4 +1,8 @@
-/* TIMER APP */
+/* 
+	  TIMER APP 0.9
+	-----------------
+	Fabiane Lima 2016
+*/
 
 $(function() {
 	
@@ -11,6 +15,7 @@ $(function() {
 	$('.minutes,.seconds').focusin(function() {
 		if ($(this).val() === 00) $(this).val('');
 		else if ($(this).val() !== 00) $(this).select();
+		$('.visor').css('background','linear-gradient(to top, #444 0%,#000 100%)');
 	});
 
 	// Verifica se não tem nada no formulário.
@@ -19,14 +24,19 @@ $(function() {
 		else {
 			// Repensar essa parte. Ele arredonda os segundos em vez de contar quanto isso dá em minutos, 
 			// por enquanto. Provavelmente resolvível com alguma coisa relacionada a resto de divisão.
-			if ($(this).hasClass('minutes')) {
-				if ($(this).val() > 59) $(this).val('60');
+			if ($(this).val().length < 2) {
+				//
 			}
-			else if ($(this).hasClass('seconds')) {
-				if ($(this).val() > 59) {
-					var min = Math.round($(this).val() / 60);
-					$(this).val('00');
-					$('.minutes').val(min);
+			else {
+				if ($(this).hasClass('minutes')) {
+					if ($(this).val() > 59) $(this).val('60');
+				}
+				else if ($(this).hasClass('seconds')) {
+					if ($(this).val() > 59) {
+						var min = Math.round($(this).val() / 60);
+						$(this).val('00');
+						$('.minutes').val(min);
+					}
 				}
 			}
 		}
@@ -38,16 +48,19 @@ $(function() {
 	$('.start').on('click', function() {
 		m = $('.minutes').val();
 		s = $('.seconds').val();
-		var minutes = m * 60 * 1000;
-		var seconds = s * 1000;
+		var minutes = m * 60 * 1000;		// Em milisegundos.
+		var seconds = s * 1000;				// Em milisegundos.
 		var total = minutes + seconds;
 		var t = total / 1000;
 		var j = 0;
 
 		if (m != 0 || s != 0) {
-			$('.reset').css('pointer-events','auto');
 			$('.minutes,.seconds').attr('disabled', true);
+			$('.reset').css('pointer-events','auto');
+			$('.reset').attr('disabled', false);
 			$('.pause').show();
+			$('.reset').removeClass('d');
+			$('.progress').show();
 			$(this).hide();
 			
 			// Feedback visual para o usuário ENQUANTO a conta acontece.
@@ -79,15 +92,15 @@ $(function() {
 
 				$('.minutes').val(m);
 				$('.seconds').val(s);
-
 			}, 1000);
 
 			// Quando acaba a contagem regressiva, alerta o usuário.
 			function stopinterval() {
 				clearInterval(contador);
-				$('.visor').css('background','#f00');
+				$('.visor').css('background','#fa002f');
+				$('.minutes,.seconds').attr('disabled', false);
 				$('.start').show();
-				$('.pause').hide();
+				$('.pause,.progress').hide();
 			}
 		}
 	});
@@ -106,9 +119,12 @@ $(function() {
 	$('.reset').on('click', function() {
 		$('.minutes,.seconds').val('00');
 		$('.minutes,.seconds').attr('disabled', false);
-		$('.visor').css('background','#000');
-		$('.start').show();
+		$(this).css('pointer-events','none');
+		$(this).attr('disabled', true);
+		$('.visor').css('background','linear-gradient(to top, #444 0%,#000 100%)');
+		$('.start,.progress').show();
 		$('.pause').hide();
+		$(this).addClass('d');
 		clearInterval(contador);
 	});
 });
