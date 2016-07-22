@@ -2,12 +2,11 @@
 
 // Tempo com 0 na frente se for um número só
 // Resto da divisão
-// Checar tipagem dos dados
 // Ele arredonda os segundos em vez de contar quanto isso dá em minutos, por enquanto
-// Talvez fazer uma função que controle o botão de pause & o fim da contagem ao mesmo tempo
-// Botões de pause e reset ainda não funcionam
 
 $(function() {
+	
+	var contador;
 
 	// Validação do formulário.
 	$('.minutes,.seconds').on('keypress', function() {
@@ -39,8 +38,8 @@ $(function() {
 
 	// Inicia o contador.
 	$('.start').on('click', function() {
-		var m = $('.minutes').val();
-		var s = $('.seconds').val();
+		m = $('.minutes').val();
+		s = $('.seconds').val();
 		var minutes = m * 60 * 1000;
 		var seconds = s * 1000;
 		var total = minutes + seconds;
@@ -54,7 +53,7 @@ $(function() {
 			$(this).hide();
 			
 			// Feedback visual para o usuário ENQUANTO a conta acontece.
-			var contador = setInterval(function() {
+			contador = setInterval(function() {
 				j++;
 				s--;
 
@@ -73,34 +72,26 @@ $(function() {
 				$('.minutes').val(m);
 				$('.seconds').val(s);
 
-				teste(m,s);												// <== teste
 			}, 1000);
 
 			// Quando acaba a contagem regressiva, alerta o usuário.
 			function stopinterval() {
 				clearInterval(contador);
 				$('.visor').css('background','#f00');
+				$('.start').show();
+				$('.pause').hide();
 			}
 		}
 	});
-			
-	var pm, ps;
-
-	function teste(m,s) {
-		pm = m;
-		ps = s;
-	}
 
 	// Botão de pause.
 	$('.pause').on('click', function teste() {
 		$('.minutes,.seconds').attr('disabled', false);
-		$('.minutes').val(pm);
-		$('.seconds').val(ps);
+		$('.minutes').val(m);
+		$('.seconds').val(s);
 		$('.start').show();
 		$(this).hide();
-		// Congelar os valor atuais de m e s.
-		// Parar o setInterval().
-		console.log(pm,ps)
+		clearInterval(contador);
 	});
 
 	// Reseta o valor dos minutos e segundos no formulário.
@@ -108,5 +99,8 @@ $(function() {
 		$('.minutes,.seconds').val('00');
 		$('.minutes,.seconds').attr('disabled', false);
 		$('.visor').css('background','#000');
+		$('.start').show();
+		$('.pause').hide();
+		clearInterval(contador);
 	});
 });
