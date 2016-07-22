@@ -54,46 +54,53 @@ $(function() {
 			$(this).hide();
 			
 			// Feedback visual para o usuário ENQUANTO a conta acontece.
-			function umSegundo() {
-				setInterval(function() {
-					j++;
-					s--;
+			var contador = setInterval(function() {
+				j++;
+				s--;
 
-					if (m < 0) m = '00';
-					if (s < 0) s = '00';
+				if (m < 0) m = '00';
+				if (s < 0) s = '00';
 
-					if (m > 0) {
-						if (s == 0) {
-							m--;
-							s = 59;
-						}
+				if (m > 0) {
+					if (s == 0) {
+						m--;
+						s = 59;
 					}
-					
-					if (j == t) stopinterval();
+				}
+				
+				if (j == t) stopinterval();
 
-					$('.minutes').val(m);
-					$('.seconds').val(s);
-				}, 1000);
-			}
+				$('.minutes').val(m);
+				$('.seconds').val(s);
 
-			umSegundo();
+				teste(m,s);												// <== teste
+			}, 1000);
 
 			// Quando acaba a contagem regressiva, alerta o usuário.
 			function stopinterval() {
 				clearInterval(contador);
 				$('.visor').css('background','#f00');
 			}
-
 		}
 	});
 			
+	var pm, ps;
+
+	function teste(m,s) {
+		pm = m;
+		ps = s;
+	}
+
 	// Botão de pause.
-	$('.pause').on('click', function() {
+	$('.pause').on('click', function teste() {
 		$('.minutes,.seconds').attr('disabled', false);
+		$('.minutes').val(pm);
+		$('.seconds').val(ps);
 		$('.start').show();
 		$(this).hide();
 		// Congelar os valor atuais de m e s.
 		// Parar o setInterval().
+		console.log(pm,ps)
 	});
 
 	// Reseta o valor dos minutos e segundos no formulário.
@@ -102,5 +109,4 @@ $(function() {
 		$('.minutes,.seconds').attr('disabled', false);
 		$('.visor').css('background','#000');
 	});
-
 });
