@@ -9,7 +9,7 @@
   background: transparent;
 }
 #container {
-  width: 100%;
+  width: 98%;
   max-width: 900px;
   margin: auto;
   padding: 1%;
@@ -76,4 +76,19 @@
 }
 #container .clear {
   clear: both;
+}
+@media screen and (max-width: 650px) {
+  #container .visor {
+    width: 100%;
+    font-size: 8em;
+  }
+  #container .buttons {
+    width: 100%;
+    font-size: 2em;
+  }
+  #container .buttons .bt {
+    float: none;
+    margin: 1%;
+    width: 94%;
+  }
 }

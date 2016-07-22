@@ -23,9 +23,10 @@ $(function() {
 		if ($(this).val() === '') $(this).val('00');
 		else {
 			// Repensar essa parte. Ele arredonda os segundos em vez de contar quanto isso dá em minutos, 
-			// por enquanto. Provavelmente resolvível com alguma coisa relacionada a resto de divisão.
+			// por enquanto. Provavelmente resolvível com alguma coisa relacionada a módulo.
 			if ($(this).val().length < 2) {
-				//
+				var v = $(this).val();
+				$(this).val('0' + v);
 			}
 			else {
 				if ($(this).hasClass('minutes')) {
@@ -35,7 +36,7 @@ $(function() {
 					if ($(this).val() > 59) {
 						var min = Math.round($(this).val() / 60);
 						$(this).val('00');
-						$('.minutes').val(min);
+						$('.minutes').val('0' + min);
 					}
 				}
 			}
