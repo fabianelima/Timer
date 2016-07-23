@@ -1,26 +1,27 @@
 ###
-	  TIMER APP 0.9
-	-----------------
-	Fabiane Lima 2016
+	    TIMER APP 0.9
+	---------------------
+	  Fabiane Lima 2016
+	Feito em CoffeeScript
 ###
 
 $ ->
-	# Validação do formulário.
-	$('.minutes,.seconds').on 'click', (event) ->					# <==== Não funcionou.
+	### Validação do formulário. ###
+	$('.minutes,.seconds').on 'keypress', (event) ->
 		return event.charCode >= 48 and event.charCode <= 57
 
-	# Se for 0, esvazia o campo; se for !0, seleciona o valor.
+	### Se for 0, esvazia o campo; se for !0, seleciona o valor. ###
 	$('.minutes,.seconds').focusin -> 
 		if $(this).val() is '00' then $(this).val('')
 		else if $(this).val() isnt '00' then $(this).select()
 		$('.visor').css('background','linear-gradient(to top, #444 0%,#000 100%)')
+		return
 
-	# Verifica se não tem nada no formulário.
+	### Verifica se não tem nada no formulário. ###
 	$('.minutes,.seconds').focusout ->
 		if $(this).val() is '' then $(this).val('00')
 		else
-			# Repensar essa parte. Ele arredonda os segundos em vez de contar quanto isso dá em minutos, 
-			# por enquanto. Provavelmente resolvível com alguma coisa relacionada a módulo.
+			### Repensar essa parte. Ele arredonda os segundos em vez de contar quanto isso dá em minutos, por enquanto. Provavelmente resolvível com alguma coisa relacionada a módulo. ###
 			if $(this).val().length < 2
 				v = $(this).val()
 				$(this).val('0' + v)
@@ -33,10 +34,11 @@ $ ->
 						min = Math.round($(this).val() / 60)
 						$(this).val('00')
 						$('.minutes').val('0' + min)
+		return
 	
-	contador = 0
+	contador = null
 
-	# Inicia o contador.
+	### Inicia o contador. ###
 	$('.start').on 'click', ->
 		m = $('.minutes').val()
 		s = $('.seconds').val()
@@ -55,7 +57,7 @@ $ ->
 			$('.progress').show()
 			$(this).hide()
 			
-			# Feedback visual para o usuário ENQUANTO a conta acontece.
+			### Feedback visual para o usuário ENQUANTO a conta acontece. ###
 			contador = setInterval ->
 				j++
 				s--
@@ -66,7 +68,7 @@ $ ->
 				if m < 10 and m != 0
 					m = '0' + m
 
-					if m.length > 2 then m = m[-2]				#  <========  slice()
+					if m.length > 2 then m = m.slice(-2)			#  <========  slice()
 
 				if s < 10 and s != 0 then s = '0' + s
 
@@ -79,26 +81,28 @@ $ ->
 
 				$('.minutes').val(m)
 				$('.seconds').val(s)
+				return
 			, 1000
 
-			# Quando acaba a contagem regressiva, alerta o usuário.
-			stopinterval ->
+			### Quando acaba a contagem regressiva, alerta o usuário. ###
+			stopinterval = ->
 				clearInterval(contador)
 				$('.visor').css('background','#fa002f')
 				$('.minutes,.seconds').attr('disabled', false)
 				$('.start').show()
-				$('.pause,.progress').hide() 
+				$('.pause,.progress').hide()
+				return
+		return
 
-	# Botão de pause.
+	### Botão de pause. ###
 	$('.pause').on 'click', ->
 		$('.minutes,.seconds').attr('disabled', false)
-		$('.minutes').val(m)
-		$('.seconds').val(s)
 		$('.start').show()
 		$('.pause').hide()
-		#clearInterval(contador);
+		clearInterval(contador);
+		return
 
-	# Reseta o valor dos minutos e segundos no formulário.
+	### Reseta o valor dos minutos e segundos no formulário. ###
 	$('.reset').on 'click', ->
 		$('.minutes,.seconds').val('00')
 		$('.minutes,.seconds').attr('disabled', false)
@@ -109,3 +113,4 @@ $ ->
 		$('.pause').hide()
 		$(this).addClass('d')
 		clearInterval(contador)
+		return

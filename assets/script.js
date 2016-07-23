@@ -1,50 +1,61 @@
 
 /*
-	  TIMER APP 0.9
-	-----------------
-	Fabiane Lima 2016
+	    TIMER APP 0.9
+	---------------------
+	  Fabiane Lima 2016
+	Feito em CoffeeScript
  */
 
 (function() {
   $(function() {
+
+    /* Validação do formulário. */
     var contador;
-    $('.minutes,.seconds').on('click', function(event) {
+    $('.minutes,.seconds').on('keypress', function(event) {
       return event.charCode >= 48 && event.charCode <= 57;
     });
+
+    /* Se for 0, esvazia o campo; se for !0, seleciona o valor. */
     $('.minutes,.seconds').focusin(function() {
       if ($(this).val() === '00') {
         $(this).val('');
       } else if ($(this).val() !== '00') {
         $(this).select();
       }
-      return $('.visor').css('background', 'linear-gradient(to top, #444 0%,#000 100%)');
+      $('.visor').css('background', 'linear-gradient(to top, #444 0%,#000 100%)');
     });
+
+    /* Verifica se não tem nada no formulário. */
     $('.minutes,.seconds').focusout(function() {
       var min, v;
       if ($(this).val() === '') {
-        return $(this).val('00');
+        $(this).val('00');
       } else {
+
+        /* Repensar essa parte. Ele arredonda os segundos em vez de contar quanto isso dá em minutos, por enquanto. Provavelmente resolvível com alguma coisa relacionada a módulo. */
         if ($(this).val().length < 2) {
           v = $(this).val();
-          return $(this).val('0' + v);
+          $(this).val('0' + v);
         } else {
           if ($(this).hasClass('minutes')) {
             if ($(this).val() > 59) {
-              return $(this).val('60');
+              $(this).val('60');
             }
           } else if ($(this).hasClass('seconds')) {
             if ($(this).val() > 59) {
               min = Math.round($(this).val() / 60);
               $(this).val('00');
-              return $('.minutes').val('0' + min);
+              $('.minutes').val('0' + min);
             }
           }
         }
       }
     });
-    contador = 0;
+    contador = null;
+
+    /* Inicia o contador. */
     $('.start').on('click', function() {
-      var j, m, minutes, s, seconds, t, total;
+      var j, m, minutes, s, seconds, stopinterval, t, total;
       m = $('.minutes').val();
       s = $('.seconds').val();
       minutes = m * 60 * 1000;
@@ -60,6 +71,8 @@
         $('.reset').removeClass('d');
         $('.progress').show();
         $(this).hide();
+
+        /* Feedback visual para o usuário ENQUANTO a conta acontece. */
         contador = setInterval(function() {
           j++;
           s--;
@@ -72,7 +85,7 @@
           if (m < 10 && m !== 0) {
             m = '0' + m;
             if (m.length > 2) {
-              m = m[-2];
+              m = m.slice(-2);
             }
           }
           if (s < 10 && s !== 0) {
@@ -88,24 +101,29 @@
             stopinterval();
           }
           $('.minutes').val(m);
-          return $('.seconds').val(s);
+          $('.seconds').val(s);
         }, 1000);
-        return stopinterval(function() {
+
+        /* Quando acaba a contagem regressiva, alerta o usuário. */
+        stopinterval = function() {
           clearInterval(contador);
           $('.visor').css('background', '#fa002f');
           $('.minutes,.seconds').attr('disabled', false);
           $('.start').show();
-          return $('.pause,.progress').hide();
-        });
+          $('.pause,.progress').hide();
+        };
       }
     });
+
+    /* Botão de pause. */
     $('.pause').on('click', function() {
       $('.minutes,.seconds').attr('disabled', false);
-      $('.minutes').val(m);
-      $('.seconds').val(s);
       $('.start').show();
-      return $('.pause').hide();
+      $('.pause').hide();
+      clearInterval(contador);
     });
+
+    /* Reseta o valor dos minutos e segundos no formulário. */
     return $('.reset').on('click', function() {
       $('.minutes,.seconds').val('00');
       $('.minutes,.seconds').attr('disabled', false);
@@ -115,7 +133,7 @@
       $('.start,.progress').show();
       $('.pause').hide();
       $(this).addClass('d');
-      return clearInterval(contador);
+      clearInterval(contador);
     });
   });
 
