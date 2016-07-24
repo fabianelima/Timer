@@ -68,7 +68,7 @@ $ ->
 				if m < 10 and m != 0
 					m = '0' + m
 
-					if m.length > 2 then m = m.slice(-2)			#  <========  slice()
+					if m.length > 2 then m = m.slice(-2)
 
 				if s < 10 and s != 0 then s = '0' + s
 
