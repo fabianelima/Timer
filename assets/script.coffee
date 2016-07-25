@@ -1,54 +1,47 @@
 ###
 	    TIMER APP 0.9
-	---------------------
+	----------------------
 	  Fabiane Lima 2016
-	Feito em CoffeeScript
+	Feito em CoffeeScript,
+	 com ajuda do Aléssio
 ###
 
+	
 $ ->
+	### With a little help of my friends... Resolve a parte do zero ter duas casas antes da vírgula. ###
+	padto2 = (number) ->
+		str = "#{number}"
+		if str.length >= 2
+			str
+		else "0#{str}"
+
 	### Validação do formulário. ###
-	$('.minutes,.seconds').on 'keypress', (event) ->
-		return event.charCode >= 48 and event.charCode <= 57
+	$('.minutes,.seconds').on 'keypress', ({charCode}) -> 48 <= charCode <= 57
 
 	### Se for 0, esvazia o campo; se for !0, seleciona o valor. ###
 	$('.minutes,.seconds').focusin -> 
-		if $(this).val() is '00' then $(this).val('')
-		else if $(this).val() isnt '00' then $(this).select()
+		$(this).select()
 		$('.visor').css('background','linear-gradient(to top, #444 0%,#000 100%)')
 		return
 
 	### Verifica se não tem nada no formulário. ###
 	$('.minutes,.seconds').focusout ->
-		if $(this).val() is '' then $(this).val('00')
-		else
-			### Repensar essa parte. Ele arredonda os segundos em vez de contar quanto isso dá em minutos, por enquanto. Provavelmente resolvível com alguma coisa relacionada a módulo. ###
-			if $(this).val().length < 2
-				v = $(this).val()
-				$(this).val('0' + v)
-			else
-				if $(this).hasClass('minutes')
-					if $(this).val() > 59 then $(this).val('60')
-
-				else if $(this).hasClass('seconds')
-					if $(this).val() > 59
-						min = Math.round($(this).val() / 60)
-						$(this).val('00')
-						$('.minutes').val('0' + min)
+		$(this).val padto2 $(this).val()
 		return
 	
-	contador = null
+	contador = undefined
 
 	### Inicia o contador. ###
 	$('.start').on 'click', ->
-		m = $('.minutes').val()
-		s = $('.seconds').val()
+		m = Number $('.minutes').val()
+		s = Number $('.seconds').val()
 		minutes = m * 60 * 1000			# Em milisegundos.
 		seconds = s * 1000				# Em milisegundos.
 		total = minutes + seconds
-		t = total / 1000
+		max = Math.ceil total / 1000
 		j = 0
 
-		if m != 0 || s != 0
+		if (m + s) > 0
 			$('.minutes,.seconds').attr('disabled', true)
 			$('.reset').css('pointer-events','auto')
 			$('.reset').attr('disabled', false)
@@ -62,25 +55,14 @@ $ ->
 				j++
 				s--
 
-				if m <= 0 then m = '00'
-				if s <= 0 then s = '00'
-
-				if m < 10 and m != 0
-					m = '0' + m
-
-					if m.length > 2 then m = m.slice(-2)
-
-				if s < 10 and s != 0 then s = '0' + s
-
-				if m > 0
-					if s == 0
-						m--
-						s = 59
+				if s < 0
+					s = 59
+					m--
 				
-				if j == t then stopinterval()
+				if j >= max then stopinterval()
 
-				$('.minutes').val(m)
-				$('.seconds').val(s)
+				$('.minutes').val padto2 m
+				$('.seconds').val padto2 s
 				return
 			, 1000
 
@@ -99,7 +81,7 @@ $ ->
 		$('.minutes,.seconds').attr('disabled', false)
 		$('.start').show()
 		$('.pause').hide()
-		clearInterval(contador);
+		clearInterval(contador)
 		return
 
 	### Reseta o valor dos minutos e segundos no formulário. ###
